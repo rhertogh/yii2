@@ -82,6 +82,11 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
     static protected $_originalSessionModule = null;
 
     /**
+     * Polyfill for ini directive session.use_strict_mode for PHP < 5.5.2.
+     */
+    static private $_useStrictModePolyfill = false;
+
+    /**
      * @var string the name of the session variable that stores the flash message data.
      */
     public $flashParam = '__flash';
@@ -552,9 +557,13 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
      */
     public function setUseStrictMode($value)
     {
-        $this->freeze();
-        ini_set('session.use_strict_mode', $value ? '1' : '0');
-        $this->unfreeze();
+        if (PHP_VERSION_ID < 50502) {
+            self::$_useStrictModePolyfill = $value;
+        } else {
+            $this->freeze();
+            ini_set('session.use_strict_mode', $value ? '1' : '0');
+            $this->unfreeze();
+        }
     }
 
     /**
@@ -564,6 +573,10 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
      */
     public function getUseStrictMode()
     {
+        if (PHP_VERSION_ID < 50502) {
+            return self::$_useStrictModePolyfill;
+        }
+
         return (bool)ini_get('session.use_strict_mode');
     }
 
