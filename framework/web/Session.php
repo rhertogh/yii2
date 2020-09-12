@@ -69,6 +69,7 @@ use yii\base\InvalidConfigException;
  * @property bool $useTransparentSessionID Whether transparent sid support is enabled or not, defaults to
  * false.
  * @property bool $useStrictMode Whether strict mode is enabled or not.
+ * Note: Enabling `useStrictMode` on PHP < 5.5.2 is only supported with custom storage classes.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -82,7 +83,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
     static protected $_originalSessionModule = null;
 
     /**
-     * Polyfill for ini directive session.use_strict_mode for PHP < 5.5.2.
+     * Polyfill for ini directive session.use-strict-mode for PHP < 5.5.2.
      */
     static private $_useStrictModePolyfill = false;
 
@@ -551,6 +552,7 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
     /**
      * @var bool Whether strict mode is enabled or not.
      * When `true` this setting prevents the session component to use an uninitialized session ID.
+     * Note: Enabling `useStrictMode` on PHP < 5.5.2 is only supported with custom storage classes.
      * Warning! Although enabling strict mode is mandatory for secure sessions, the default value of 'session.use-strict-mode' is `0`.
      * @see https://www.php.net/manual/en/session.configuration.php#ini.session.use-strict-mode
      * @since 2.0.38
