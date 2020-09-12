@@ -49,5 +49,7 @@ trait SessionTestTrait
         $this->assertEquals($id, $strictSession->getId());
         $this->assertEquals('session data', $strictSession->get('strict_mode_test'));
         $strictSession->close();
+
+        $strictSession->regenerateID();
     }
 }
