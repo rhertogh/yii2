@@ -558,7 +558,11 @@ class Session extends Component implements \IteratorAggregate, \ArrayAccess, \Co
     public function setUseStrictMode($value)
     {
         if (PHP_VERSION_ID < 50502) {
-            self::$_useStrictModePolyfill = $value;
+            if ($this->getUseCustomStorage() || !$value) {
+                self::$_useStrictModePolyfill = $value;
+            } else {
+                throw new InvalidConfigException('Enabling `useStrictMode` on PHP < 5.5.2 is only supported with custom storage classes.');
+            }
         } else {
             $this->freeze();
             ini_set('session.use_strict_mode', $value ? '1' : '0');

@@ -94,15 +94,7 @@ class SessionTest extends TestCase
 
     public function testInitUseStrictMode()
     {
-        $session = new Session([
-            'useStrictMode' => true,
-        ]);
-        $this->assertEquals(true, $session->getUseStrictMode());
-
-        $session = new Session([
-            'useStrictMode' => false,
-        ]);
-        $this->assertEquals(false, $session->getUseStrictMode());
+        $this->initStrictModeTest(Session::className());
     }
 
     public function testUseStrictMode()
